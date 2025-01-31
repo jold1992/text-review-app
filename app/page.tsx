@@ -2,13 +2,11 @@ import { getTokens } from "next-firebase-auth-edge";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { clientConfig, serverConfig } from "../config";
-
-//https://hackernoon.com/lang/es/usando-la-autenticacion-de-firebase-con-las-ultimas-caracteristicas-de-nextjs
-//configuirar .env
+import HomePage from "./HomePage";
 
 export default async function Home() {
   const tokens = await getTokens(
-    cookies(),
+    await cookies(),
     {
       apiKey: clientConfig.apiKey,
       cookieName: serverConfig.cookieName,
@@ -21,10 +19,7 @@ export default async function Home() {
     notFound();
   }
 
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-xl mb-4">Super secure home page</h1>
-      <p> Only <strong>{tokens?.decodedToken.email}</strong> holds the magic key to this kingdom! </p>
-    </main>
-  );
+  //retorno el componente de la página de inicio con el email del token decodificado
+  return <HomePage email={tokens?.decodedToken.email} />;
+
 }
